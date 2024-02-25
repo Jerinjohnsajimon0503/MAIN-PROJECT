@@ -1,0 +1,1330 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+<body id="style-2" style="overflow-y: hidden;">
+    <div class="login-wrapper">
+        <div class="main" style="margin-top: -180px;">
+            <h2 style="position: absolute;top: 20px;right: 20px;color: black;z-index: 100;font-size: 15px;" onclick="closeLogin()"><i class="fa-solid fa-x"></i></h2>
+            <img src="{% static 'images/66841-medicine-capsule.gif' %}" alt="" style="width: 80px;transform: rotate(90deg); margin-bottom: 28px;">
+            <h1 style="color: black;">Signin</h1>
+            <p>Login into your account now</p>
+    
+            <div class="inputs">
+                <input type="text" placeholder="username" class="userName" style="margin-bottom: 10px;"><br>
+                <input type="password" placeholder="password" class="password"><br>
+            </div>
+            <p style="display: none;justify-content: center;align-items: center;width: 100%;margin-top: 25px;opacity: 1;margin-bottom: 10px;" class="error">Invalid login credentials</p>
+
+            <button onclick="sendData()">Login into my account</button>
+        </div>
+    </div>
+    <div class="wrap">
+        <div class="payment" style="position: relative;z-index: 10;display: none;position: absolute;top: 250px;backdrop-filter: blur(8px);width: 830px;height: 350px;flex-direction: column;justify-content: center;align-items: center;background-color: rgba(255, 255, 255);border-radius: 10px;display: none;">
+            <img src="{% static 'images/97517-phone-payments-seth.gif' %}" alt="" style="width: 90px;margin-top: 15px;margin-bottom: 15px;">
+            <h3 style="text-align: center;">Payment</h3>
+            <h5 style="text-align: center;font-size: 15px;padding: 0px;margin-right: 0;font-weight: 500;">Select your mode of payment</h5>
+            <h2 style="width: 40px;height: 40px;background-color: #e0e0e0;color: rgb(44, 44, 44);display: flex;justify-content: center;align-items: center;position: absolute;top: 25px;left: 25px;cursor: pointer;border-radius: 150px;font-size: 19px;" onclick="backView()"><i class="fa-solid fa-arrow-left"></i></h2>
+            <div class="category" style="z-index: 1;position: relative;margin-top: 25px;">
+                <h3 style="background-color: #07a44b;color: white;border: 2px solid white;" onclick="changeTabPayment(1,this)" class="he">UPI</h3>
+                <h3 class="fr" onclick="changeTabPayment(2,this)">Cash On Delivery</h3>
+                <h3 class="ve" onclick="changeTabPayment(3,this)">Debit Card</h3>
+            </div>
+            <div style="display: flex;justify-content: center;align-items: center;gap: 15px;margin-top: 15px;" class="upi-pay">
+                
+                <input type="text" placeholder="Enter your upi@id" style="padding: 10px;border: 2px solid rgb(217, 217, 217);background-color: white;outline: none;width: 270px;border-radius: 8px;" class="upi">
+                <h2 style="width: 190px;height: 45px;background-color: #3baa5a;color: white;display: flex;justify-content: center;align-items: center;position: relative;cursor: pointer;border-radius: 5px;font-size: 17px;font-weight: 600;gap: 10px;" onclick="buyNow(this)" ><ion-icon name="wallet-outline"></ion-icon> Buy now</h2>
+
+            </div>
+
+            <div style="display: none;justify-content: center;align-items: center;gap: 15px;margin-top: 15px;" class="address">
+                
+                <input type="text" placeholder="Enter delivery address" style="padding: 10px;border: 2px solid rgb(217, 217, 217);background-color: white;outline: none;width: 270px;border-radius: 8px;" class="add">
+                <input type="number" placeholder="pincode" style="padding: 10px;border: 2px solid rgb(217, 217, 217);background-color: white;outline: none;width: 100px;border-radius: 8px;" class="pin">
+                <h2 style="width: 190px;height: 45px;background-color: #3baa5a;color: white;display: flex;justify-content: center;align-items: center;position: relative;cursor: pointer;border-radius: 5px;font-size: 17px;font-weight: 600;gap: 10px;" onclick="buyNowAddress(this)" ><ion-icon name="wallet-outline"></ion-icon> Place Order</h2>
+
+            </div>
+
+            <div style="display: none;justify-content: center;align-items: center;gap: 15px;margin-top: 15px;" class="debit">
+                
+                <input type="number" placeholder="Enter account number" style="padding: 10px;border: 2px solid rgb(217, 217, 217);background-color: white;outline: none;width: 270px;border-radius: 8px;" class="acc">
+                <input type="number" placeholder="ccv" style="padding: 10px;border: 2px solid rgb(217, 217, 217);background-color: white;outline: none;width: 70px;border-radius: 8px;" class="ccv">
+                <h2 style="width: 190px;height: 45px;background-color: #3baa5a;color: white;display: flex;justify-content: center;align-items: center;position: relative;cursor: pointer;border-radius: 5px;font-size: 17px;font-weight: 600;gap: 10px;" onclick="buyNowDebit(this)" ><ion-icon name="wallet-outline"></ion-icon> Buy now ₹{{product.price}}</h2>
+
+            </div>
+        </div>
+
+        <div class="orderStatus" style="position: relative;z-index: 10;display: none;position: absolute;top: 250px;backdrop-filter: blur(8px);width: 830px;height: 350px;flex-direction: column;justify-content: center;align-items: center;background-color: rgba(255, 255, 255);border-radius: 10px;">
+            <img src="{% static 'images/97517-phone-payments-seth.gif' %}" alt="" style="width: 150px;margin-top: 5px;margin-bottom: 15px;">
+            <h3 style="text-align: center;">Order</h3>
+            <h5 style="text-align: center;font-size: 15px;padding: 0px;margin-right: 0;font-weight: 500;">Below is the status of your order.</h5>
+            <h2 style="width: 40px;height: 40px;background-color: #e0e0e0;color: rgb(44, 44, 44);display: flex;justify-content: center;align-items: center;position: absolute;top: 25px;left: 25px;cursor: pointer;border-radius: 150px;font-size: 19px;" onclick="backViewOrder()"><i class="fa-solid fa-arrow-left"></i></h2>
+            <h5 class="status" style="margin-top: 25px;font-size: 20px;"></h5>
+        </div>
+    
+    <div class="view">
+        
+        <img src="{{product.image.url}}" alt="" style="margin-top: 25px;position: relative;z-index: 1;object-fit: contain;">
+        <h3 style="margin-top: 0px;">{{product.name}}</h3>
+        <h4 style="font-weight: 600;opacity: 0.6;" class="stockText">{{product.stock}} stocks left</h4>
+        <img src="{% static 'images/pattern.png' %}" alt="" style="position: absolute;width: 100%;height: 100%;opacity: 0.15;object-fit: cover;">
+        <input type="hidden" name="" class="pk" value="{{product.pk}}">
+        <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt magni, dolore voluptates quas officia cum eligendi quibusdam explicabo vero, itaque repellendus praesentium eveniet doloribus voluptatum recusandae neque dolor molestiae nesciunt?</p> -->
+        <!-- <h2 style="width: 130px;height: 40px;background-color: #217b97;color: white;display: flex;justify-content: center;align-items: center;position: absolute;top:25px;right:25px;cursor: default;border-radius: 5px;font-size: 17px;font-weight: 600;font-size: 16px;" >TRACKING</h2> -->
+        {% if not profile.is_shopkeeper %}
+        <form class="stts" style="display: flex;justify-content: center;align-items: center;width: 80%;gap: 25px;margin-top: 25px;" method = "POST" action="">
+            {% csrf_token %}
+            <h4>Enter quantity</h4>
+            <input type="number" placeholder="Enter the quantity" name="status" required class="quantity" value="{{cart.quantity}}" style="width: 45px;" onchange="setPrice(this)" disabled max="{{product.stock}}">
+            <!-- <input type="text" placeholder="Enter location" name="location" required> -->
+            <h4 style="width: 30px;height: 30px;border-radius: 8px;background-color: #e4e4e4;display: flex;justify-content: center;align-items: center;position: relative;z-index: 10;cursor: pointer;" onclick="increase()">+</h4>
+            <h4 style="width: 30px;height: 30px;border-radius: 8px;background-color: #e4e4e4;display: flex;justify-content: center;align-items: center;position: relative;z-index: 10;cursor: pointer;" onclick="decrease()">-</h4>
+            <!-- <button>Upload</button> -->
+        </form>
+        <div style="display: flex;justify-content: center;align-items: center;gap: 35px;margin-top: 25px;">
+            {% if not product.banned %}
+            <!-- <h2 style="width: 190px;height: 45px;background-color: #3baa5a;color: white;display: flex;justify-content: center;align-items: center;position: relative;cursor: pointer;border-radius: 5px;font-size: 17px;font-weight: 600;gap: 10px;" onclick="buyNow(this)" class="buyBtn"><ion-icon name="wallet-outline"></ion-icon> Buy now ₹{{product.price}}</h2> -->
+            <h2 style="width: 190px;height: 45px;background-color: #3baa5a;color: white;display: flex;justify-content: center;align-items: center;position: relative;cursor: pointer;border-radius: 5px;font-size: 17px;font-weight: 600;gap: 10px;" onclick="payment()" class="buyBtn"><ion-icon name="wallet-outline"></ion-icon> Buy now ₹{{cart.price}}</h2>
+
+            {% if not cart %}
+            <h2 style="width: 190px;height: 45px;background-color: #ffffff;color: rgb(40, 40, 40);display: flex;justify-content: center;align-items: center;position: relative;cursor: pointer;border-radius: 5px;font-size: 17px;font-weight: 600;border: 2px solid rgb(222, 222, 222);gap: 10px;" class="cart" onclick="addToCart()"><ion-icon name="cart-outline"></ion-icon> Add To Cart</h2>
+            {% else %}
+            <h2 style="width: 190px;height: 45px;background-color: #ffffff;color: rgb(40, 40, 40);display: flex;justify-content: center;align-items: center;position: relative;cursor: pointer;border-radius: 5px;font-size: 17px;font-weight: 600;border: 2px solid rgb(222, 222, 222);gap: 10px;cursor: default;" class="cart"><ion-icon name="cart-outline"></ion-icon> Added To Cart</h2>
+            {% endif %}
+            {% else %}
+            <h3>⚠️ This product is banned from use</h3>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        {% if profile.is_shopkeeper %}
+        <form class="stts" style="display: flex;justify-content: center;align-items: center;width: 80%;gap: 25px;margin-top: 25px;" method = "POST" action="">
+            {% csrf_token %}
+            <h4>Enter Stock</h4>
+            <input type="number" name="status" required class="stock" value="{{product.stock}}" style="width: 45px;" onchange="setPrice(this)" max="">
+            <!-- <input type="text" placeholder="Enter location" name="location" required> -->
+            <!-- <h4 style="width: 30px;height: 30px;border-radius: 8px;background-color: #e4e4e4;display: flex;justify-content: center;align-items: center;position: relative;z-index: 10;cursor: pointer;" onclick="increase()">+</h4> -->
+            <!-- <h4 style="width: 30px;height: 30px;border-radius: 8px;background-color: #e4e4e4;display: flex;justify-content: center;align-items: center;position: relative;z-index: 10;cursor: pointer;" onclick="decrease()">-</h4> -->
+            <!-- <button>Upload</button> -->
+            <h2 style="width: 190px;height: 45px;background-color: #3baa5a;color: white;display: flex;justify-content: center;align-items: center;position: relative;cursor: pointer;border-radius: 5px;font-size: 17px;font-weight: 600;gap: 10px;" class="buyBtn" onclick="updateStock(this)"><ion-icon name="bar-chart-outline"></ion-icon> Update Stock</h2>
+
+        </form>
+
+       
+        
+        {% endif %}
+        <input type="hidden" class="price" value="{{product.price}}">
+        <h3 class="balance" style="display: none;">⚠️ Your account dosent have sufficient balance.</h3>
+        <h3 class="out" style="display: none;">⚠️ We dont have enough stock left</h3>
+        <input type="hidden" class="total" value="{{cart.price}}">
+
+        <h3 style="font-weight: 600;margin-top: 15px;text-align: center;display: flex;margin-top: 8px;margin-top: 25px;background-color: #2c8c79;color: rgb(255, 255, 255);padding: 8px 25px 8px 25px;border-radius: 50px;font-size: 16px;position: relative;z-index: 10;" >SHOPKEEPER DETAILS</h3>
+            <h5 style="margin-bottom: 35px;opacity: 0.7;">Listed below are details about the manufacturer</h5>
+            <h2 style="width: 40px;height: 40px;background-color: #e0e0e0;color: rgb(44, 44, 44);display: flex;justify-content: center;align-items: center;position: absolute;top: 25px;left: 25px;cursor: pointer;border-radius: 150px;font-size: 19px;" onclick="back()"><i class="fa-solid fa-arrow-left"></i></h2>
+            <table style="position: relative;z-index: 1;">
+                
+                <tr>
+                   
+                    <th style="font-weight: 600;font-size: 15px;width: 20%;">Name</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 20%;">Location</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 30%;">Address</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 20%;">Phone</th>
+                    <!-- <th style="font-weight: 600;font-size: 15px;width: 30%;">Transcation</th> -->
+
+                </tr>
+                
+               
+                <tr>
+                    
+                    <td style="text-align: center;font-size: 14px;width: 190px;">{{product.manufacturerName}}</td>
+
+                    <td style="text-align: center;font-size: 14px;width: 150px;">{{product.manufacturerCountry}}</td>
+                    <td style="text-align: center;font-size: 14px;width: 150px;">{{product.manufacturerAddress}}</td>
+                    <td style="text-align: center;font-size: 14px;width: 280px;">{{product.manufacturerContactNumber}}</td>
+                    
+
+                    <!-- <td style="font-weight: 400;"><button style="padding: 10px;background-color: #2d919a;color: white;font-weight: 400;width: 120px;border: none;outline: none;">Send Amount</button></td> -->
+                </tr>
+                
+                
+                
+                
+            </table>
+
+        <!-- FOR PRODUCT DETAILS ------------------------ -->
+
+        <h3 style="font-weight: 600;margin-top: 15px;text-align: center;display: flex;margin-top: 8px;margin-top: 25px;background-color: #2c8c79;color: rgb(255, 255, 255);padding: 8px 25px 8px 25px;border-radius: 50px;font-size: 16px;position: relative;z-index: 10;" >PRODUCT DETAILS</h3>
+            <h5 style="margin-bottom: 35px;opacity: 0.7;">Listed below are details about the product</h5>
+            <!-- <h2 style="width: 40px;height: 40px;background-color: #262626;color: white;display: flex;justify-content: center;align-items: center;position: absolute;top: 25px;left: 25px;cursor: pointer;border-radius: 150px;font-size: 19px;" onclick="back()"><i class="fa-solid fa-arrow-left"></i></h2> -->
+            <table style="position: relative;z-index: 1;">
+                
+                <tr>
+                   
+                    <th style="font-weight: 600;font-size: 15px;width: 30%;">Name</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 10%;">Stock</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 40%;">Origin</th>
+                    <th style="font-weight: 600;font-size: 15px;width: 30%;">Type</th>
+                    <!-- <th style="font-weight: 600;font-size: 15px;width: 30%;">Transcation</th> -->
+
+                </tr>
+                
+               
+                <tr>
+                    
+                    <td style="text-align: center;font-size: 14px;width: 190px;">{{product.name}}</td>
+
+                    <td style="text-align: center;font-size: 14px;width: 100px;">{{product.dosage}}</td>
+                    <td style="text-align: center;font-size: 14px;width: 150px;">{{product.activeIngredient}}</td>
+                    <td style="text-align: center;font-size: 14px;width: 130px;">{{product.route}}</td>
+                    
+
+                </tr>
+                
+
+                
+            </table>
+
+            <h3 style="font-weight: 600;margin-top: 15px;text-align: center;display: flex;margin-top: 8px;margin-top: 25px;background-color: #2c8c79;color: rgb(255, 255, 255);padding: 8px 25px 8px 25px;border-radius: 50px;font-size: 16px;position: relative;z-index: 10;text-transform: uppercase;" >MORE PRODUCTS FROM {{product.user.username}}</h3>
+            <h5 style="margin-bottom: 35px;opacity: 0.7;">Below are list of  products from {{product.user.username}}</h5>
+            <div class="second-section" style="flex-wrap: wrap;">
+                {% for product in products %}
+                {% if product.name != name %}
+                <div class="product">
+                    <img src="{{product.image.url}}" alt="" style="height: 190px;object-fit: contain;">
+                    <h2>{{product.name}}</h2>
+                    <h3 style="color: rgb(14, 14, 14);font-weight: 600;">₹{{product.price}}</h3>
+                    <div class="options">
+                        {% if request.user.is_authenticated %}
+                        <a href="{% url 'track' pk=product.pk %}" style="text-decoration: none;color: black;"><h4><ion-icon name="eye"></ion-icon></h4></a>
+                        {% else %}
+                        <a onclick="showLogin()" style="text-decoration: none;color: black;"><h4><ion-icon name="eye"></ion-icon></h4></a>
+
+                        {% endif %}
+                        <!-- <h4><ion-icon name="heart-outline"></ion-icon></h4> -->
+                        {% if not product.cart %}
+                        <h4 onclick="addToCart('{{product.pk}}',this)"><ion-icon name="cart-outline"></ion-icon></h4>
+                        {% else %}
+                        <h4><ion-icon name="cart"></ion-icon></h4>
+                        {% endif %}
+                        <!-- <h4><ion-icon name="cart"></ion-icon></h4> -->
+                        {% if request.user.is_authenticated %}
+                        <h4 onclick="share('http://localhost:8000/track/{{product.pk}}')"><ion-icon name="share-social"></ion-icon></h4>
+                        {% else %}
+                        <h4><ion-icon name="share-social"></ion-icon></h4>
+
+                        {% endif %}
+                    </div>
+
+                </div>
+                {% endif %}
+                {% endfor %}
+                
+            </div>
+        <!-- For tracking--------------------------------------- -->
+        {% if found == 0 %}
+        {% if profile.is_delivery_man  %}
+        <h3 style="font-weight: 500;margin-top: 15px;text-align: center;display: flex;margin-top: 8px;margin-top: 35px;" >PRODUCT STATUS</h3>
+            <h5 style="margin-bottom: 35px;opacity: 0.7;">Enter the product status below</h5>
+        <form class="stts" style="display: flex;justify-content: center;align-items: center;width: 80%;gap: 25px;" method = "POST" action="{% url 'status' pk=pk %}">
+            {% csrf_token %}
+            <input type="text" placeholder="Enter status" name="status" required>
+            <input type="text" placeholder="Enter location" name="location" required>
+            <button>Upload</button>
+        </form>
+        {% endif %}
+
+        {% endif %}
+        {% if not profile.is_shopkeeper %}
+        <h2 style="margin-top: 25px;">Sell Product</h2>
+        <p style="text-align: center;font-size: 16px;width: 400px;">Do you wish to sell anything to this shop? Then start by filling the form below</p>
+        <form action="{% url 'sell' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="group1" style="padding-right: 150px;width: 96%;">
+                <input type="text" placeholder="Product Name" required name = "name">
+                <input type="number" placeholder="Stock" required min="1" name="stock">
+                <input type="file" name="image" accept="Image/*" required>
+                <input type="hidden" name="pk" value="{{product.pk}}">
+                <button style="height: 43px;background-color: #3baa5a;color: white;display: flex;justify-content: center;align-items: center;position: relative;cursor: pointer;border-radius: 5px;font-size: 17px;font-weight: 600;gap: 10px;width: 290px;border: none;outline: none;" type="submit" ><ion-icon name="wallet-outline"></ion-icon>Sell</button>
+
+            </div>
+        </form>
+        {% endif %}
+        {% if request.user.username == product.user.username %}
+        <form action="{% url 'delete' pk=product.pk %}">
+            <button style="width: 790px;margin-top: 25px;height: 45px;background-color: #ebebeb;color: rgb(31, 31, 31);display: flex;justify-content: center;align-items: center;position: relative;cursor: pointer;border-radius: 5px;font-size: 17px;font-weight: 600;gap: 10px;border: none;outline: none;" onclick="buyNow(this)"><ion-icon name="trash"></ion-icon> Delete Product</button>
+        </form>
+        {% endif %}
+        <!-- <h3 style="font-weight: 600;margin-top: 15px;text-align: center;display: flex;margin-top: 8px;margin-top: 25px;background-color: #2c8c79;color: rgb(255, 255, 255);padding: 8px 25px 8px 25px;border-radius: 50px;font-size: 16px;position: relative;z-index: 10;" >TRACKING DETAILS</h3> -->
+                    <!-- <h5 style="margin-bottom: 35px;opacity: 0.7;">Listed below are the status of the medicine from the manufaturer</h5> -->
+            <!-- <h2 style="width: 40px;height: 40px;background-color: #e2e2e2;color: rgb(43, 43, 43);display: flex;justify-content: center;align-items: center;position: absolute;top: 25px;left: 25px;cursor: pointer;border-radius: 150px;font-size: 19px;" onclick="back()"><i class="fa-solid fa-arrow-left"></i></h2> -->
+            
+    </div>
+
+</div>
+
+
+    <div class="signup-wrapper">
+        <div class="main" style="width: 380px;margin-top: -160px;padding-left: 25px;">
+            <h2 style="position: absolute;top: 20px;right: 20px;color: black;font-size: 15px;" onclick="closeSignup()"><i class="fa-solid fa-x"></i></ion-icon></h2>
+            <img src="{% static 'images/66841-medicine-capsule.gif' %}" alt="" style="width: 80px;transform: rotate(90deg); margin-bottom: 28px;">
+            <h1  style="color: black;">Signup</h1>
+            <p>Create your new account now</p>
+    
+            <div class="inputs inps">
+                <div style="display: flex;justify-content: center;align-items: center;gap: 10px;width: 100%;">
+
+                    <input type="text" placeholder="username" class="username1"><br>
+                    <input type="email" placeholder="email address" class="email1"><br>
+                </div>
+                <input type="number" placeholder="phone number" class="phone">
+                <input type="text" placeholder="Address" class="address"><br>
+
+                <input type="password" placeholder="password" class="password1"><br>
+            </div>
+            <p style="margin-top: -7px;color: rgb(9, 9, 9);opacity: 0.7;width: 100%;text-align: center;display: none;font-size: 15px;justify-content: center;align-items: center;margin-bottom: 15px;" class="err2">Username already exists</p>
+
+            <button onclick="checkSignup()">Create a new account account</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="message" >
+
+            <div class="wrap-chats">
+                <div class="top-msg">
+    
+                    <div class="profile-chat">
+                        <!-- <img src="{{gig.avatar}}" alt=""> -->
+                        <div>
+                            <h3><ion-icon name="chatbubble-ellipses" style="color: #07a44b;margin-right: 10px;"></ion-icon> Messages</h3>
+                            <!-- <p>Avg. response time : {{gig.response_time}}hr</p> -->
+                        </div>
+                    </div>
+                    <h5 onclick="closeMsg()"><i class="fa-solid fa-xmark"></i></h5>
+                </div>
+    
+                <div class="chats">
+                    {% for chat in chats %}
+                    <div class="chat" onclick="showMessages(this)">
+                        <input type="hidden" value="{{request.user.username}}" class="from_user1">
+                        <input type="hidden" class="to_user1" value="{{chat.username}}">
+                        <img src="{{chat.image}}" alt="">
+                        <div class="chat-details">
+                            <h3 >{{chat.username}}</h3>
+                            <p>click to view message</p>
+                        </div>
+                        <h5>10:25Pm</h5>
+                    </div>
+                    {% endfor %}
+    
+             
+    
+                </div>
+            </div>
+            <input type="hidden" class="global_to" value="">
+            <input type="hidden" class="global_from" value="{{request.user.username}}">
+    
+            <div class="wrap-msg" style="position: relative;height: 100%;display: none;">
+                <div class="top-msg">
+                    <div class="profile-chat">
+                        <h4 style="width: 25px;height: 25px;border-radius: 8px;background-color: #07a44b;color: white;display: flex;justify-content: center;align-items: center;" onclick="back()"><ion-icon name="arrow-back-outline"></ion-icon></h4>
+                        <img src="{% static 'images/09 (1).jpg' %}" alt="" class="chat-pic">
+                        <div>
+                            <h3 class="cht-username">ads</h3>
+                            <p class="avg">Avg. response time : 2hr</p>
+                        </div>
+                    </div>
+                    <h5 onclick="closeMsg()"><i class="fa-solid fa-xmark"></i></h5>
+                </div>
+    
+                <div class="messages">
+                    
+                
+      
+    
+                </div>
+    
+                <input type="hidden" value = "1" class = "to_user">
+                <input type="hidden" value = "{{request.user.username}}" class = "from_user">
+    
+                <div class="msg-options">
+                    <input type="text" placeholder="Type your message here" class="text-msg">
+                    <button onclick="sendMsg()" style="cursor: pointer;"><ion-icon name="send" ></ion-icon></button>
+                </div>
+    
+        </div>
+    
+        </div>
+        {% if request.user.is_authenticated %}
+        <!-- <button onclick="showMsg()" style="transition: 0.3s;cursor: pointer;" class="message-button pulse"><ion-icon name="chatbubble-ellipses" ></ion-icon> </button> -->
+        {% endif %}
+        <div class="navbar" style="position: fixed;top: 0;width: 100%;z-index: 150;background-color: white;">
+            <div class="navbar1" >
+                <h1 style="text-transform: uppercase;font-weight: 600;font-size: 12px;">Welcome to our online store!</h1>
+               
+            </div>
+            <div class="navbar2">
+                <img src="{% static 'images/logo-default.png' %}" alt="" style="width: 120px;">
+                {% if request.user.is_authenticated %}
+                <div class="search">
+                    
+                    <form class="btn" method="post" action="{% url 'search' %}">
+                        {% csrf_token %}
+                        <input type="text" name = "query" placeholder="Search for products....." required style="font-family: Poppins;">
+                        <select name="price" id="" style="margin-left: -100px;margin-right: 20px;font-size: 12px;">
+                            <option value="">Select price</option>
+                            <option value="50">Below 50</option>
+                            <option value="100">Below 100</option>
+                            <option value="200">Below 200</option>
+                            <option value="300">Below 300</option>
+                            <option value="400">Below 400</option>
+                            <option value="500">Below 500</option>
+                        </select>
+                        <button>SEARCH</button>
+                    </form>
+                </div>
+                {% endif %}
+                {% if not request.user.is_authenticated %}
+                    <!-- <div class="login" onclick="showLogin()" style="cursor: pointer;">
+                        <h6><ion-icon name="lock-closed"></ion-icon></h6>
+                        <h5>Login</h5>
+                    </div>
+                    <div class="login" onclick="showSignup()" style="cursor: pointer;margin-left: 35px;">
+                        <h6><ion-icon name="person"></ion-icon></h6>
+                        <h5>Signup</h5>
+                    </div>
+                    <div class="login" onclick="showSignupShopkeeper()" style="cursor: pointer;margin-left: 35px;">
+                        <h6><ion-icon name="person-add"></ion-icon></h6>
+                        <h5>Shopkeeper Signup</h5>
+                    </div> -->
+                    
+                    {% else %}
+                    <!-- {% if profile.is_shopkeeper %}
+                    <div class="login" style="cursor: pointer;" onclick="showUpload()">
+                        <img src="{% static 'images/en.jpg' %}" alt="">
+                        <h5><ion-icon name="add-outline"></ion-icon> Add Product</h5>
+                    </div>
+                    {% endif %} -->
+
+                    <div class="login"  style="cursor: pointer;text-decoration: none;color: black;display: flex;justify-content: center;align-items: center;gap: 15px;cursor: default;margin-left: -50px;" >
+                        {% if not profile.is_shopkeeper %}
+                        <h3 style="width: 35px;height: 35px;display: flex;justify-content: center;align-items: center;border: 2px solid rgb(228, 228, 228);border-radius: 100px;cursor: pointer;" onclick="showNotifications()"><ion-icon name="notifications-outline" style="opacity: 0.7;"></ion-icon></h3>
+                        {% else %}
+                        
+                        <a href="{% url 'notifications' %}" style="text-decoration: none;color: black;"><h3 style="width: 35px;height: 35px;display: flex;justify-content: center;align-items: center;border: 2px solid rgb(228, 228, 228);border-radius: 100px;cursor: pointer;" onclick="showNotifications()"><ion-icon name="notifications-outline" style="opacity: 0.7;"></ion-icon></h3></a>
+
+                        {% endif %}
+                        <h3 style="width: 155px;height: 35px;display: flex;justify-content: center;align-items: center;border: 2px solid rgb(228, 228, 228);border-radius: 100px;cursor: pointer;font-size: 13px;font-weight: 600;cursor: default;" >Balance : ₹ {{profile.balance}}</h3>
+
+                        <a href="{% url 'logout' %}" style="text-decoration: none;color: black;"> <h3 style="width: 105px;height: 35px;display: flex;justify-content: center;align-items: center;border: 2px solid rgb(228, 228, 228);border-radius: 100px;cursor: pointer;font-size: 12px;font-weight: 600;gap: 8px;text-transform: uppercase;" onclick="showNotifications()"><img src="{{profile.image.url}}" alt="" style="width: 23px;height: 23px;object-fit: cover;border-radius: 100px;cursor: pointer;"> Logout</h3></a>
+
+                        
+                        <!-- <h5>Logout</h5> -->
+                    </div>
+                    {% endif %}
+                
+                
+            </div>
+            <div class="navbar3">
+                <div class="navbar-details">
+                    <div class="bar" style="background-color: rgb(237, 237, 237);border-radius: 150px;width: fit-content;padding-left: 25px;padding-right: 25px;">
+                        <h5 style="font-size: 15px;color: #138f82;padding-bottom: 5px;"><ion-icon name="person"></ion-icon></h5>
+                        <h4>Welcome {{request.user.username}}</h4>
+                    </div>
+                    <div class="links">
+                        <a href="{% url 'homepage' %}">Home</a>
+                        {% if request.user.is_authenticated %}
+                        <a href="{% url 'shop' %}">Shop</a>
+                        {% else %}
+                        <a onclick="showLogin()" style="cursor: pointer;">Shop</a>
+
+                        {% endif %}
+                        <a onclick="scrollToAbout()" style="cursor: pointer;">About</a>
+                        <a onclick="scrollToContact()" style="cursor: pointer;">Contact</a>
+                        <a href="" style="opacity: 0;pointer-events: none;">Blog</a>
+                        <a href="" style="opacity: 0;pointer-events: none;">Pagess</a>
+                        <a href="" style="opacity: 0;pointer-events: none;">Pa</a>
+                        
+                    </div>
+                </div>    
+                <div class="phone">
+                    {% if request.user.is_authenticated and not profile.is_shopkeeper %}
+                    <div class="like" style="position: relative;">
+                        <!-- <h5 style="font-size: 14px;"><ion-icon name="heart-outline"></ion-icon></h5> -->
+                        <!-- <h5 style="font-size: 14px;"></h5> -->
+
+                        <a href="{% url 'cart' %}" style="text-decoration: none;color: black;font-weight: 600;"><h3 style="display: flex;justify-content: center;align-items: center;gap: 15px;font-weight: 600;text-transform: uppercase;"><ion-icon name="cart-outline"></ion-icon> My Cart</h3></a>
+                        <a href="{% url 'orders' %}" style="text-decoration: none;color: black;font-weight: 600;"><h3 style="display: flex;justify-content: center;align-items: center;gap: 15px;margin-left: 25px;font-weight: 600;text-transform: uppercase;"><ion-icon name="wallet-outline"></ion-icon> My orders</h3></a>
+                        <div class="notifications" style="position: absolute;top: -30px;width: 450px;background-color: white;padding: 10px;display: none;right: -10px;" >
+                            <h4 style="position: absolute;top: 0;right: 0;background-color: rgb(52, 52, 52);color: white;width: 25px;height: 25px;cursor: pointer;display: flex;justify-content: center;align-items: center;" onclick="closeNotifications()"><i class="fa-solid fa-xmark"></i></h4>
+                            <h3 style="font-size: 19px;font-weight: 600;">Notifications For You</h3>
+                            <p style="font-size: 13px;opacity: 0.7;margin-top: 5px;">Below are the list of notifications you have</p>
+                            {% for notification in notifications %}
+                            <a style="display: flex;gap: 8px;justify-content: center;align-items: flex-start;margin-top: 25px;cursor:pointer;text-decoration: none;color: black;">
+
+                                <img src="{% static 'images/user.png' %}" alt="" style="width: 50px;height: 50px;border-radius: 100px;object-fit: cover;margin-left: 15px;">
+                                <p style="font-weight: 600;font-size: 14px;line-height: 25px;">{{notification.message}}</p>
+                            </a>
+                            
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="like" style="opacity: 0;display: none;">
+                        <!-- <h5 style="font-size: 14px;"><ion-icon name="heart-outline"></ion-icon></h5> -->
+                        <!-- <h5 style="font-size: 14px;"></h5> -->
+                        <a onclick="showLogin()" style="text-decoration: none;color: black;font-weight: 600;cursor: pointer;"><h3 style="display: flex;justify-content: center;align-items: center;gap: 15px;font-weight: 600;text-transform: uppercase;"><ion-icon name="cart-outline"></ion-icon> My Cart</h3></a>
+                        <a onclick="showLogin()" style="text-decoration: none;color: black;font-weight: 600;cursor: pointer;"><h3 style="display: flex;justify-content: center;align-items: center;gap: 15px;margin-left: 25px;font-weight: 600;text-transform: uppercase;"><ion-icon name="wallet-outline"></ion-icon> My orders</h3></a>
+                    </div>
+                    {% endif %}
+                    
+                    {% if not request.user.is_authenticated %}
+                    <div class="like" style="opacity: 1;display: flex;margin-left: -90px;">
+                        <!-- <h5 style="font-size: 14px;"><ion-icon name="heart-outline"></ion-icon></h5> -->
+                        <!-- <h5 style="font-size: 14px;"></h5> -->
+                        <a onclick="showLogin()" style="text-decoration: none;color: black;font-weight: 600;cursor: pointer;"><h3 style="display: flex;justify-content: center;align-items: center;gap: 15px;font-weight: 600;text-transform: uppercase;color: black;">LOGIN</h3></a>
+                        <a onclick="showSignup()" style="text-decoration: none;color: black;font-weight: 600;cursor: pointer;"><h3 style="display: flex;justify-content: center;align-items: center;gap: 15px;margin-left: 25px;font-weight: 600;text-transform: uppercase;color: black;">SIGNUP</h3></a>
+                        <a onclick="showSignupShopkeeper()" style="text-decoration: none;color: black;font-weight: 600;cursor: pointer;"><h3 style="display: flex;justify-content: center;align-items: center;gap: 15px;margin-left: 25px;font-weight: 600;text-transform: uppercase;color: black;">SHOPKEEPER SIGNUP</h3></a>
+                    </div>
+                    {% endif %}
+                    {% if profile.is_shopkeeper %}
+                    <div class="like" style="opacity: 1;display: flex;margin-left: 80px;">
+                        <!-- <h5 style="font-size: 14px;"><ion-icon name="heart-outline"></ion-icon></h5> -->
+                        <!-- <h5 style="font-size: 14px;"></h5> -->
+                        <a onclick="showUpload()" style="text-decoration: none;color: black;font-weight: 600;cursor: pointer;"><h3 style="display: flex;justify-content: center;align-items: center;gap: 8px;font-weight: 600;text-transform: uppercase;color: black;"><ion-icon name="add"></ion-icon> ADD PRODUCT</h3></a>
+                        
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        <!-- <div class="banner" style="margin-top: 180px;">
+            <div class="image-banner">
+                <img src="{% static 'images/slider2-111.jpg' %}" alt="">
+                <div class="banner-details">
+                    <h5>GET THE COMPLETE</h5>
+                    <h1>Aquim Hand Sanitizer</h1>
+                    <p>Kill 99.99% of germs fast</p>
+                    
+                </div>
+            </div>
+            <div class="img-group">
+                <img src="{% static 'images/banner-2-11.jpg' %}" alt="">
+                <img src="{% static 'images/banner-2-12.jpg' %}" alt="">
+            </div>
+
+        </div> -->
+        <div class="banner-wrap" style="display: flex;justify-content: center;align-items: center;position: relative;">
+            <div class="text" style="position: absolute;text-align: center;z-index: 10;">
+                <h2>IHERB</h2>
+                <p>Nature's remedies, delivered to your doorstep.</p>
+                <!-- <button>Show All Products</button> -->
+            </div>
+            <img src="{% static 'images/parsely-4688651.jpg' %}" alt="" style="width: 100%;height: 380px;object-fit: cover;margin-top: 100px;filter: brightness(0.8);">
+        </div>
+        <!-- <div class="banner-bottom">
+            <div class="details">
+                <h5>MUST HAVE</h5>
+                <h3>Best Selling Products</h3>
+            </div>
+            <img src="Blood-Pressure-and-Sprague-Stethoscope-Kit.jpg" alt="">
+            <img src="Honey-Tulsi-300g.jpg" alt="">
+            <img src="Milk-Powder-900g (1).jpg" alt="">
+            <img src="Pack-of-50-Disposable-Face-Masks.jpg" alt="">
+            <img src="UX-A-01-Non-Contact-Infrared-Thermometer.jpg" alt="">
+            <img src="Vitamin-C-with-Zinc-30-Tablets.jpg" alt="">
+        </div> -->
+        <!-- <div class="first-section">
+            <div class="section1">
+                <img class="img1" src="banner-2-13.jpg" alt="">
+                <img class="img2" src="banner-2-14.jpg" alt="">
+                <img class="img3" src="banner-2-15.jpg" alt="">
+            </div>
+        </div> -->
+        <div class="section2">
+            <h1 style="margin-top: 25px;">Products</h1>
+            <p style="margin-top: -25px;">Browse the products you want</p>
+            {% if not profile.is_shopkeeper %}
+            <div class="second-section" style="flex-wrap: wrap;">
+                {% for product in products %}
+                <!-- {% if request.user.is_authenticated %}
+                <a class="cards" href="{% url 'track' pk=product.pk %}" style="text-decoration: none;color: black;">
+                {% else %}
+                <a class="cards" style="text-decoration: none;color: black;" onclick="showLogin()">
+
+                {% endif %}
+                    <img src="{{product.image.url}}" alt="">
+                    <div class="card-details">
+                        <h4>{{product.user.username}}</h4>
+                        <h2>{{product.name}} <br>{{product.dosage}} Mg</h2>
+                        <h3 style="color: rgb(14, 14, 14);font-weight: 600;">₹{{product.price}}</h3>
+                        
+                    </div>
+                </a> -->
+                <div class="product">
+                    <img src="{{product.image.url}}" alt="">
+                    <h2>{{product.name}}</h2>
+                    <h3 style="color: rgb(14, 14, 14);font-weight: 600;">₹{{product.price}}</h3>
+                    <div class="options">
+                        <a href="{% url 'track' pk=product.pk %}" style="text-decoration: none;color: black;"><h4><ion-icon name="eye"></ion-icon></h4></a>
+                        <!-- <h4><ion-icon name="heart-outline"></ion-icon></h4> -->
+                        {% if not product.cart %}
+                        <h4 onclick="addToCart('{{product.pk}}',this)"><ion-icon name="cart-outline"></ion-icon></h4>
+                        {% else %}
+                        <h4><ion-icon name="cart"></ion-icon></h4>
+                        {% endif %}
+                        <!-- <h4><ion-icon name="cart"></ion-icon></h4> -->
+                        <h4><ion-icon name="share-social"></ion-icon></h4>
+                    </div>
+
+                </div>
+                {% endfor %}
+                
+                
+            </div>
+            {% else %}
+            <div class="second-section" style="flex-wrap: wrap;">
+                {% for product in products_shop %}
+                <div class="product">
+                    <img src="{{product.image.url}}" alt="">
+                    <h2>{{product.name}}</h2>
+                    <h3 style="color: rgb(14, 14, 14);font-weight: 600;">₹{{product.price}}</h3>
+                    <div class="options">
+                        <a href="{% url 'track' pk=product.pk %}" style="text-decoration: none;color: black;"><h4 style="display: flex;justify-content: center;align-items: center;font-weight: 500;font-size: 16px;gap: 10px;"><ion-icon name="eye"></ion-icon> View Product</h4></a>
+                        <!-- <h4 style="font-size: 15px;font-weight: 600;display: flex;justify-content: center;align-items: center;gap: ;">{{product.stock}} <ion-icon name="bar-chart-outline"></ion-icon></h4> -->
+                        <!-- {% if not product.cart %}
+                        <h4 onclick="addToCart('{{product.pk}}',this)"><ion-icon name="cart-outline"></ion-icon></h4>
+                        {% else %}
+                        <h4><ion-icon name="cart"></ion-icon></h4>
+                        {% endif %} -->
+                        <!-- <h4><ion-icon name="cart"></ion-icon></h4> -->
+                        <!-- <h4><ion-icon name="share-social"></ion-icon></h4> -->
+                    </div>
+
+                </div>
+               
+
+                {% endfor %}
+                
+                
+            </div>
+            {%  endif %}
+        </div>   
+        <center><a href="{% url 'shop' %}"><button style="width: 190px;padding: 10px;border: 2px solid rgb(229, 229, 229);outline: none;background-color: rgb(241, 241, 241);color: rgb(0, 0, 0);font-size: 16px;border-radius: 5px;margin-bottom: 40px;font-weight: 500;cursor: pointer;">View all products</button></center></a>
+        <div class="section2">
+            <h1 style="margin-top: 25px;">Feedback</h1>
+            <p style="margin-top: -25px;">Valuable Insight from Our Customers!</p>
+            
+        </div>   
+        {% if request.user.is_authenticated %}
+        <center>
+
+            <form action="{% url 'comment' %}" method="post" style="margin-bottom: 35px;display: flex;justify-content: center;align-items: center;gap: 15px;padding: 12px;border-radius: 80px;width: 600px;margin-top: 25px;border: 2px solid rgb(225, 225, 225);">
+                {% csrf_token %}
+                <input type="text" required placeholder="Write comment" name="comment" style="width: 85%;padding: 10px;border:none;border-top: transparent;border-left: transparent;border-right: transparent;position: relative;z-index: 10;background-color: transparent;outline: none;font-weight: 600;">
+                <button style="background-color: #259757;color: white;width: 100px;border-radius: 100px;font-weight: 600;padding: 10px;border: none;outline: none;position: relative;z-index: 10;cursor: pointer;">Post</button>
+            </form>
+        </center>
+        {% endif %}
+        <center>
+
+       
+        <div class="comments" style="width: 800px;position: relative;margin-bottom: 55px;margin-top: 35px;">
+            {% for comment in comments %}
+            <div class="comment" style="display: flex;gap: 25px;padding-left: 25px;padding-right: 25px;margin-bottom: 25px;width: 100%;">
+                <img src="{{comment.image}}" alt="" style="width: 40px;height: 40px;border-radius: 100px;object-fit: cover;">
+                <div>
+                    <h5 style="text-align: left;font-size: 16px;font-weight: 600;margin-bottom: 8px;">{{comment.user.username}}</h5>
+                    <p style="margin-left: 0;padding: 0;font-weight: 600;font-size: 15px;">{{comment.comment}}</p>
+                    {% if comment.reply != "" %}
+                    <div class="comment" style="display: flex;gap: 25px;padding-left: 25px;padding-right: 25px;margin-top: 25px;position: relative;">
+                        <img src="{% static 'images/arrow.png' %}" alt="" style="z-index: 10;width: 200px;height: 80px;object-fit: cover;position: absolute;width: 80px;top: -45px;left: -60px;opacity: 0.5;">
+                        <img src="{% static 'images/09 (1).jpg' %}" alt="" style="width: 40px;height: 40px;border-radius: 100px;object-fit: cover;">
+                        
+                        <div>
+                            <h5 style="text-align: left;font-size: 16px;font-weight: 600;margin-bottom: 5px;">Admin</h5>
+                            <p style="margin-left: 0;padding: 0;font-weight: 600;font-size: 15px;">{{comment.reply}}</p>
+                            
+                            <!-- <p style="margin-left: 15px;padding: 0;font-weight: 600;opacity: 0.7;margin-top: 15;">Admin: Yeah its is</p> -->
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <p style="padding: 0;font-weight: 600;opacity: 0.7;margin-top: 15;position: absolute;right: 10px;font-size: 14px;">{{comment.date}}</p>
+                
+            </div>
+             {% endfor %}
+        </div>
+        </center>
+        <!-- <div class="section3" style="margin-bottom: 50px;position: relative;">
+            <div class="third-section">
+                <img src="{% static 'images/banner-2-16.jpg' %}" alt="">
+                <img src="{% static 'images/banner-2-17.jpg' %}" alt="">
+            </div>    
+        </div>   -->
+        <center>
+            <div style="background-color: #f1f1f1;padding-top: 20px;padding-bottom: 20px;position: relative;" class="about">
+                <img src="{% static 'images/pattern.png' %}" alt="" style="width: 100%;height: 100%;object-fit: cover;position: absolute !important; top: 0;left: 0;opacity: 0.15;">
+                <h2 style="color: rgb(32, 32, 32);font-weight: 600;">About US 💉</h2>
+                <p style="width: 650px;text-align: center;color: #7b7b7b;line-height: 30px;margin-top: 25px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Et fugit, numquam delectus aperiam quam necessitatibus voluptatum accusamus impedit? Autem tempora sequi earum molestias consequatur! Vitae natus praesentium at perferendis nulla?</p>
+            </div>
+            
+        </center>
+
+
+        <footer style="background-color: rgb(30, 30, 30);width: 100%;height: 60px;color: white;display: flex;justify-content: center;align-items: center;gap: 45px;" class="foot">
+            <!-- <h3>Follow us on</h3> -->
+            <h4><ion-icon name="logo-facebook"></ion-icon></h4>
+            <h4><ion-icon name="logo-twitter"></ion-icon></h4>
+            <h4><ion-icon name="logo-instagram"></ion-icon></h4>
+        </footer>
+        
+       
+    </div>        
+    <script src="{% static 'js/index.js' %}"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script> 
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+<script>
+    function sendData(){
+        
+        var data = new FormData()
+  
+        data.append("username", document.querySelector('.userName').value)
+        data.append("password", document.querySelector('.password').value)
+  
+        
+  
+        data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+        
+        $.ajax({
+  
+            method:"POST",
+            url:'/checkLogin/',
+            processData:false,
+            contentType:false,
+            // MimeType:"multipart/form-data",
+            data:data,
+            success:function(res){
+                localStorage.setItem("message",res.message)
+  
+                if(res.message === 0){
+                    
+                    login(data)
+                    localStorage.setItem("username",document.querySelector('.userName').value)
+                    localStorage.setItem('password',document.querySelector('.password').value)
+                    // location.reload();
+                    
+                }
+                else{
+                    document.querySelector('.error').style.display = "flex"
+                    
+                }
+                
+  
+            }
+        })
+    }
+  
+    function login(data){
+  
+  
+        $.ajax({
+  
+            method:"POST",
+            url:'/login/',
+            processData:false,
+            contentType:false,
+            MimeType:"multipart/form-data",
+            data:data,
+            success:function(res){
+                console.log("it worked :)")
+                
+                setTimeout(()=>{
+  
+                    location.reload();
+                },1000)
+            }
+            })
+    }
+  
+    function signup(data){
+        console.log("888888888");
+        $.ajax({
+  
+            method:"POST",
+            url:'/register/',
+            processData:false,
+            contentType:false,
+            MimeType:"multipart/form-data",
+            data:data,
+            success:function(res){
+                
+                setTimeout(()=>{
+  
+                    location.reload();
+  
+                },1000)
+            }
+            })
+  
+    }
+  
+    function checkSignup(){
+        var data = new FormData()
+  
+        data.append("username", document.querySelector('.username1').value)
+        data.append("email", document.querySelector('.email1').value)
+        data.append("password", document.querySelector('.password1').value)
+        data.append("phone", document.querySelector('.phone').value)
+        data.append("address", document.querySelector('.address').value)
+        data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+  
+        
+        $.ajax({
+  
+            method:"POST",
+            url:'/checkSignup/',
+            processData:false,
+            contentType:false,
+            // MimeType:"multipart/form-data",
+            data:data,
+            success:function(res){
+                // localStorage.setItem("message",res.message)
+  
+                if(res.message === 0){
+                    
+  
+                        // alert("Valid email address!");
+                        
+                        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  
+                        if (document.querySelector('.email1').value.match(validRegex)) {
+                            document.querySelector('.err2').style.display = "none"
+                            // alert("Valid email address!");
+                            error = 0
+                            console.log("");
+  
+                        } else {
+  
+                            alert("Invalid email address!");
+                            error = 1
+                            
+  
+                        }
+  
+                        if (document.querySelector('.username1').value == "") {
+  
+  // alert("Valid email address!");
+                        error = 1
+                        alert("please enter a valid username!");
+                        document.querySelector('.err2').style.display = "none"
+  
+  
+                        } else {
+  
+                            console.log("");
+                            error = 0
+  
+                        }
+  
+                        if (document.querySelector('.phone').value == "") {
+  
+  // alert("Valid email address!");
+                        error = 1
+                        alert("please enter phone number!");
+                        document.querySelector('.err2').style.display = "none"
+  
+  
+                        } else {
+  
+                            console.log("");
+                            error = 0
+  
+                        }
+  
+                        if (document.querySelector('.address').value == "") {
+  
+  // alert("Valid email address!");
+                        error = 1
+                        alert("please enter your address!");
+                        document.querySelector('.err2').style.display = "none"
+  
+  
+                        } else {
+  
+                            console.log("");
+                            error = 0
+  
+                        }
+  
+                        if (document.querySelector('.password1').value == "" ) {
+  
+                            alert("please fill the password!");
+                            document.querySelector('.err2').style.display = "none"
+                            error = 1
+                            } 
+                            
+                            else if(document.querySelector('.password1').value.length < 7){
+  
+                            alert("password length must be greater than 7");
+                            document.querySelector('.err2').style.display = "none"
+                            error = 1
+  
+  
+                            }
+  
+                            else{
+                                error = 0
+                                
+                            }
+  
+                            
+                        
+  
+                    
+                    
+                    // localStorage.setItem("username",document.querySelector('.username').value)
+                    // localStorage.setItem('password',document.querySelector('.password').value)
+                    // location.reload();
+                    
+                }
+                else{
+                    
+  
+                    document.querySelector('.err2').style.display = "flex"
+  
+                }
+  
+                if(error == 0){
+                                signup(data)
+                            }
+                
+  
+            }
+        })
+    }
+  
+    
+  
+    function back(){
+        history.back()
+    }
+
+    function addToCart(){
+      
+      var data = new FormData()
+
+      data.append("pk", document.querySelector('.pk').value)
+      data.append("quantity",document.querySelector('.quantity').value)
+
+      
+
+      data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+      
+      $.ajax({
+
+          method:"POST",
+          url:'/addToCart/',
+          processData:false,
+          contentType:false,
+          // MimeType:"multipart/form-data",
+          data:data,
+          success:function(res){
+              
+            document.querySelector('.cart').innerHTML ='<ion-icon name="cart-outline"></ion-icon> Added To Cart'
+            document.querySelector('.cart').style.pointerEvents = "none"
+
+          }
+      })
+  }
+
+
+  function buyNow(element){
+      
+      var data = new FormData()
+
+      data.append("pk", document.querySelector('.pk').value)
+      data.append("quantity",document.querySelector('.quantity').value)
+      data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+      data.append("price",document.querySelector('.total').value)
+      var upiRegex = /^[\w.-]+@[\w.-]+$/;
+      var upi = document.querySelector('.upi').value 
+      var ures = upiRegex.test(upi);
+      console.log(ures);
+        if(ures == true){
+      $.ajax({
+
+          method:"POST",
+          url:'/buy/',
+          processData:false,
+          contentType:false,
+          // MimeType:"multipart/form-data",
+          data:data,
+          success:function(res){
+            if(res.success == "1"){
+                document.querySelector('.payment').style.display = "none"
+                document.querySelector('.view').style.display = "none"
+                document.querySelector('.orderStatus').style.display = "flex"
+                
+                setTimeout(()=>{
+                    // alert("Order placed successfully ✅")
+                    document.querySelector('.status').innerText = "Order placed successfully ✅"
+                },2000)
+                
+                setTimeout(()=>{
+                    // alert("Successfully shipped order 🚢")
+                    document.querySelector('.status').innerText = "Successfully shipped order 🚢"
+                },9000)
+                
+                setTimeout(()=>{
+                    // alert("Order out for delivery 📦")
+                    document.querySelector('.status').innerText = "Order out for delivery 📦"
+                },18000)
+
+                
+                setTimeout(()=>{
+                    // alert("Order delivered successfully 🤑")
+                    document.querySelector('.status').innerText = "Order delivered successfully 🤑"
+                },25000)
+                element.innerHTML = '<ion-icon name="wallet-outline"></ion-icon> Order Placed'
+            }
+            else{
+                if(res.out == 0){
+
+                    document.querySelector('.balance').style.display = "flex"
+                }
+            }
+
+            if (res.out == 1 ) {
+
+                document.querySelector('.out').style.display = "flex"
+
+            }
+            else{
+                document.querySelector('.out').style.display = "none"
+            }
+
+          }
+      })}
+      else{
+        alert("Invalid upi id")
+      }
+  }
+
+  function buyNowAddress(element){
+      
+      var data = new FormData()
+
+      data.append("pk", document.querySelector('.pk').value)
+      data.append("quantity",document.querySelector('.quantity').value)
+      data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+      data.append("price",document.querySelector('.total').value)
+      
+      
+        if(document.querySelector('.add').value != "" && document.querySelector('.pin').value != ""){
+      $.ajax({
+
+          method:"POST",
+          url:'/buyAdd/',
+          processData:false,
+          contentType:false,
+          // MimeType:"multipart/form-data",
+          data:data,
+          success:function(res){
+            if(res.success == "1"){
+                document.querySelector('.payment').style.display = "none"
+                document.querySelector('.view').style.display = "none"
+                document.querySelector('.orderStatus').style.display = "flex"
+                
+                setTimeout(()=>{
+                    // alert("Order placed successfully ✅")
+                    document.querySelector('.status').innerText = "Order placed successfully ✅"
+                },2000)
+                
+                setTimeout(()=>{
+                    // alert("Successfully shipped order 🚢")
+                    document.querySelector('.status').innerText = "Successfully shipped order 🚢"
+                },9000)
+                
+                setTimeout(()=>{
+                    // alert("Order out for delivery 📦")
+                    document.querySelector('.status').innerText = "Order out for delivery 📦"
+                },18000)
+
+                
+                setTimeout(()=>{
+                    // alert("Order delivered successfully 🤑")
+                    document.querySelector('.status').innerText = "Order delivered successfully 🤑"
+                },25000)
+                element.innerHTML = '<ion-icon name="wallet-outline"></ion-icon> Order Placed'
+            }
+            else{
+                if(res.out == 0){
+
+                    document.querySelector('.balance').style.display = "flex"
+                }
+            }
+
+            if (res.out == 1 ) {
+
+                document.querySelector('.out').style.display = "flex"
+
+            }
+            else{
+                document.querySelector('.out').style.display = "none"
+            }
+
+          }
+      })}
+      else{
+        alert("Please fill the fields")
+      }
+  }
+
+  function validateAccountNumber(accountNumber) {
+  // Account number pattern: 8 to 12 digits
+  var accountRegex = /^\d{8,12}$/;
+
+  return accountRegex.test(accountNumber);
+}
+
+function validateCVV(cvvNumber) {
+  // CVV number pattern: 3 digits
+  var cvvRegex = /^\d{3}$/;
+
+  return cvvRegex.test(cvvNumber);
+}
+  function buyNowDebit(element){
+      
+      var data = new FormData()
+
+      data.append("pk", document.querySelector('.pk').value)
+      data.append("quantity",document.querySelector('.quantity').value)
+      data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+      data.append("price",document.querySelector('.total').value)
+      
+      
+        if(validateAccountNumber(document.querySelector('.acc').value) && validateCVV(document.querySelector('.ccv').value)){
+      $.ajax({
+
+          method:"POST",
+          url:'/buy/',
+          processData:false,
+          contentType:false,
+          // MimeType:"multipart/form-data",
+          data:data,
+          success:function(res){
+            if(res.success == "1"){
+                document.querySelector('.payment').style.display = "none"
+                document.querySelector('.view').style.display = "none"
+                document.querySelector('.orderStatus').style.display = "flex"
+                
+                setTimeout(()=>{
+                    // alert("Order placed successfully ✅")
+                    document.querySelector('.status').innerText = "Order placed successfully ✅"
+                },2000)
+                
+                setTimeout(()=>{
+                    // alert("Successfully shipped order 🚢")
+                    document.querySelector('.status').innerText = "Successfully shipped order 🚢"
+                },9000)
+                
+                setTimeout(()=>{
+                    // alert("Order out for delivery 📦")
+                    document.querySelector('.status').innerText = "Order out for delivery 📦"
+                },18000)
+
+                
+                setTimeout(()=>{
+                    // alert("Order delivered successfully 🤑")
+                    document.querySelector('.status').innerText = "Order delivered successfully 🤑"
+                },25000)
+                element.innerHTML = '<ion-icon name="wallet-outline"></ion-icon> Order Placed'
+            }
+            else{
+                if(res.out == 0){
+
+                    document.querySelector('.balance').style.display = "flex"
+                }
+            }
+
+            if (res.out == 1 ) {
+
+                document.querySelector('.out').style.display = "flex"
+
+            }
+            else{
+                document.querySelector('.out').style.display = "none"
+            }
+
+          }
+      })}
+      else{
+        alert("Invalid details please check again !")
+      }
+  }
+
+  async function payment(){
+    // var out = await check("element")
+    console.log(out)
+    var data = new FormData()
+    console.log();
+      data.append("pk", document.querySelector('.pk').value)
+      data.append("quantity",document.querySelector('.quantity').value)
+      data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+      data.append("price",document.querySelector('.total').value)
+      var out = 0;
+      $.ajax({
+
+          method:"POST",
+          url:'/check/',
+          processData:false,
+          contentType:false,
+          // MimeType:"multipart/form-data",
+          data:data,
+          success:function(res){
+            
+
+            if (res.out == 1 ) {
+                document.querySelector('.payment').style.display = "none"
+                document.querySelector('.out').style.display = "flex"
+                console.log("Heyyy");
+
+            }
+            else{
+                console.log("hihi");
+                document.querySelector('.payment').style.display = "flex"
+                 document.querySelector('.out').style.display = "none"
+                 document.querySelector('.view').style.display = "none"
+            }
+
+            
+            // out = res.out
+            // console.log("--------------" + out);
+          }
+      })
+    // if(out == 1){
+
+        
+    // }
+    // else{
+    //     document.querySelector('.payment').style.display = "block"
+    //     document.querySelector('.out').style.display = "none"
+    // }
+  }
+
+
+
+  function updateStock(element){
+      
+      var data = new FormData()
+
+      data.append("pk", document.querySelector('.pk').value)
+      data.append("stock",document.querySelector('.stock').value)
+      data.append("csrfmiddlewaretoken",'{{ csrf_token }}')
+    //   data.append("price",document.querySelector('.total').value)
+      $.ajax({
+
+          method:"POST",
+          url:'/stock/',
+          processData:false,
+          contentType:false,
+          // MimeType:"multipart/form-data",
+          data:data,
+          success:function(res){
+            
+
+                
+         element.innerHTML = '<ion-icon name="bar-chart-outline"></ion-icon> Stock Updated'
+         document.querySelector('.stockText').innerText = res.stock + " stocks left"
+
+          }
+      })
+  }
+
+
+//   function setPrice(element){
+//     var price = document.querySelector('.price').value 
+//     var total = 0;
+//     if(element.value >=0 ){
+    
+//     if(element.value != 0){
+//         total = price * element.value;
+//         document.querySelector('.price').value = total
+//         document.querySelector('.total').value = total
+//         document.querySelector('.buyBtn').innerHTML = '<ion-icon name="wallet-outline"></ion-icon> Buy now ₹'+total
+//     }
+//     else{
+//         total = price / element.value
+//         document.querySelector('.price').value = total
+//         document.querySelector('.total').value = total
+//         document.querySelector('.buyBtn').innerHTML = '<ion-icon name="wallet-outline"></ion-icon> Buy now ₹'+total
+//     }
+// }
+//   }
+function backView(){
+    document.querySelector('.payment').style.display = "none"
+    document.querySelector('.view').style.display = "flex"
+  }
+  function increase(){
+        var quantity = parseInt(document.querySelector('.quantity').value)
+
+        var price = document.querySelector('.price').value 
+        var total = parseInt(document.querySelector('.total').value)
+        console.log(quantity);
+        if(quantity == 0){
+
+            total = total * 2;
+        }
+        else{
+            total = total + parseInt(price);
+        }
+        // document.querySelector('.price').value = total
+        document.querySelector('.total').value = total
+        document.querySelector('.quantity').value = quantity + 1
+        document.querySelector('.buyBtn').innerHTML = '<ion-icon name="wallet-outline"></ion-icon> Buy now ₹'+total
+    
+  }
+
+  function decrease(){
+      var quantity = parseInt(document.querySelector('.quantity').value)
+      if(quantity >= 0.5){
+
+    var price = document.querySelector('.price').value 
+    if(quantity > 1){
+
+        var total = parseInt(document.querySelector('.total').value)
+        total = total - parseInt(price);
+    }
+    else{
+        var total = parseInt(document.querySelector('.total').value)
+        total = total / 2;
+        console.log(total);
+    }
+        // document.querySelector('.price').value = total
+    document.querySelector('.total').value = total
+    if(quantity == 1){
+        document.querySelector('.quantity').value = quantity - 0.5
+    }
+    else{
+
+        document.querySelector('.quantity').value = quantity - 1
+    }
+    document.querySelector('.buyBtn').innerHTML = '<ion-icon name="wallet-outline"></ion-icon> Buy now ₹'+total
+}
+  }
+  
+  </script>   
+</body>
+</html>

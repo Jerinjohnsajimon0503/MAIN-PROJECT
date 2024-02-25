@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1275" height="526" viewBox="0 0 1275 526">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 26.004px;
+        text-anchor: middle;
+        fill: #0b0b0b;
+        font-family: Poppins;
+        font-weight: 800;
+      }
+
+      .cls-2 {
+        fill: #b5b6b6;
+      }
+    </style>
+  </defs>
+  <text id="FMM" class="cls-1" transform="translate(636.912 442.264) scale(18.054)"><tspan x="0">F<tspan class="cls-2">MM</tspan></tspan></text>
+</svg>

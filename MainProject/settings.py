@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_material.apps.AdminMaterialDashboardConfig',
     #  'jazzmin',
     'App',
     'django.contrib.admin',

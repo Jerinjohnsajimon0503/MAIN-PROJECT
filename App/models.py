@@ -24,7 +24,7 @@ class userProfile(models.Model):
         (APPROVE, 'Approve'),
         (REJECT, 'Reject')
     )
-    
+    # status = models.BooleanField(choices=CHOICES, default=REJECT)
     is_shopkeeper = models.BooleanField(choices=CHOICES, default=REJECT)
     # is_delivery_man = models.BooleanField(default=False)
     rating = models.DecimalField(default=0.0,max_digits=2,decimal_places=1)
@@ -39,7 +39,7 @@ class Product(models.Model):
     added_by = models.CharField(max_length=5000,blank=True)
     image = models.ImageField(upload_to='product',default='sherlock.jpg',blank=True)
     userImage = models.CharField(max_length=5000,blank=True)
-    
+    # transaction_address = models.CharField(max_length=5000,blank=True)
     name = models.CharField(max_length=5000,blank=True)
     dosage = models.CharField(max_length=5000,blank=True)
     price = models.IntegerField(default=0)
@@ -128,7 +128,38 @@ class Payment(models.Model):
         formatted_date = self.date.strftime('%Y-%m-%d %H:%M:%S')  # Format the date as 'YYYY-MM-DD HH:MM:SS'
         return f"{self.from_user} paid Rs {self.amount} to {self.to_user} for the product {self.product} on {formatted_date}"
 
+class Chat(models.Model):
 
+    from_user = models.CharField(max_length=5000)
+    to_user = models.CharField(max_length=5000)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        return self.from_user + " chat"
+
+class Message(models.Model):
+
+    chat = models.ForeignKey(Chat,on_delete=models.CASCADE)
+    from_user = models.CharField(max_length=5000)
+    to_user = models.CharField(max_length=5000)
+    message = models.CharField(max_length=50000)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        return "message"
+    
+
+class Comment(models.Model):
+
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    date = models.DateTimeField(default=timezone.now)
+    image = models.CharField(max_length=50000)
+    comment = models.CharField(max_length=50000)
+    reply = models.CharField(max_length=50000)
+
+    def __str__(self):
+        return self.user.username + " commented: "+ self.comment
+    
 
 class Notification(models.Model):
     
@@ -179,7 +210,18 @@ def update_user_profile(sender, instance, **kwargs):
 class Rating(models.Model):
     
     user = models.CharField(max_length=20)
-    product = models.CharField(max_length=20)
+    doctor = models.CharField(max_length=20)
     rating = models.IntegerField(default=0)
     def __str__(self):
         return self.user
+    
+class commentUser(models.Model):
+
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    
+    image = models.CharField(default="none",max_length=400,null=True)
+    text = models.CharField(default="none",max_length=100000,null=True)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    sentiment = models.CharField(default="none",max_length=400,null=True)
+    def __str__(self):
+            return self.user.username + " 's comment"
